@@ -12,6 +12,7 @@ import {
   appendLog,
   applyButtonState,
   announceStatus,
+  clearRoomSelections,
   clearLog,
   closeDialog,
   renderHud,
@@ -161,6 +162,7 @@ const handleFaceRoom = () => {
 const handleAvoidRoom = () => {
   if (!state.canAvoid || state.status !== "playing") return;
   if (state.phase !== "choice") return;
+  clearRoomSelections();
   if (state.room.length === 0) {
     drawToRoom();
   }

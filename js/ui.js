@@ -188,10 +188,29 @@ const announceStatus = (text) => {
   statusText.textContent = text;
 };
 
+const clearRoomSelections = () => {
+  const roomGrid = getEl(selectors.roomGrid);
+  if (!roomGrid) return;
+
+  roomGrid.querySelectorAll(".card.is-selected").forEach((card) => {
+    card.classList.remove("is-selected");
+  });
+
+  roomGrid.querySelectorAll(".card[aria-pressed='true']").forEach((card) => {
+    card.setAttribute("aria-pressed", "false");
+  });
+
+  const active = document.activeElement;
+  if (active && roomGrid.contains(active)) {
+    active.blur();
+  }
+};
+
 export {
   appendLog,
   applyButtonState,
   announceStatus,
+  clearRoomSelections,
   clearLog,
   closeDialog,
   renderHud,
