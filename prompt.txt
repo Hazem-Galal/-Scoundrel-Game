@@ -1,0 +1,147 @@
+Role
+You are an expert front-end game developer and UI designer.
+
+You build production-quality, accessible, mobile-first web apps with clean, modular JavaScript, modern CSS, and tasteful micro-interactions.
+
+You deliver multi-file static projects with clean organization and maintainable code.
+
+Task
+Implement a static web application version of the solo card game Scoundrel as a polished portfolio project.
+
+Deliver fully working code, separated into multiple files (HTML, CSS, JavaScript, and supporting modules if useful).
+
+The game should run entirely in the browser with no external build step.
+
+Context
+Game Overview
+Scoundrel is a solo dungeon-crawl card game.
+
+You manage:
+
+Health (max 20)
+Weapons (♦ 2–10)
+Potions (♥ 2–10)
+Your goal is to survive against monsters (♣/♠).
+
+You win by clearing the dungeon deck; you lose if your health drops to 0.
+Your score is your remaining health if you win, or a negative score if you lose (sum of monster values left in the deck, subtracted from 0).
+
+Deck Setup
+Start with a 52-card deck.
+Remove Jokers, red face cards (J/Q/K ♥♦), and red Aces (A♥, A♦).
+Remaining 44 cards:
+26 Monsters: all ♣ and ♠ (values 2–10, J=11, Q=12, K=13, A=14)
+9 Weapons: ♦ 2–10
+9 Potions: ♥ 2–10
+Shuffle to form the dungeon deck.
+Room & Gameplay Loop
+At the start of each turn, draw cards until 4 cards are visible — this is the Room.
+You must choose to either:
+Avoid the Room
+Place all 4 cards on the bottom of the deck in order
+Cannot avoid twice in a row
+Face the Room
+Choose and resolve 3 of the 4 cards (in any order)
+The 4th card is carried forward as the first card of the next Room
+Resolving Cards
+Weapon (♦)
+Equip immediately, discarding your old weapon and its defeated monster stack
+Reset weapon’s history
+Potion (♥)
+Heal by its value, capped at 20
+Only one potion per Room may be used; additional potions are discarded without effect
+Monster (♣/♠)
+Bare-handed: Take damage equal to its full value
+With weapon:
+Damage = monster value − weapon value (min 0)
+If defeated (damage ≤ 0), stack monster on weapon and update weapon’s last defeated value
+Weapon rule:
+A weapon can only be used against monsters with value ≤ the last defeated monster’s value (non-increasing sequence)
+Ending & Scoring
+Win: clear the dungeon → score = remaining health
+Loss: health ≤ 0 → score = negative sum of remaining monster values
+Constraints
+Technical
+Use vanilla HTML, CSS, and JavaScript (no frameworks, no external libraries)
+Organize code into multiple files logically (HTML, CSS, JS, optional helpers)
+Must be self-contained and run in a browser without a server or build step
+UI / UX Requirements
+HUD (Top)
+Health meter
+Equipped weapon panel (value + last defeated or “—”)
+Turn counter
+Deck/discard counts
+Avoid button state
+Room Grid (Center)
+4 cards
+Flip animation on reveal
+Styled distinctly by type (monster/weapon/potion)
+Action Log (Bottom)
+Scrollable
+ARIA live region for accessibility
+Logs events (e.g., “Equipped ♦7”, “Took 4 damage”)
+Controls
+New Game
+Restart
+Avoid
+Help/Rules modal
+Accessibility
+Fully keyboard operable
+Visible focus styles
+Proper ARIA labels
+Respects prefers-reduced-motion
+Visual Design
+Modern color palette
+CSS variables for theme colors
+Responsive grid layout
+Clear feedback for interactive states
+Gameplay Logic
+Implement Fisher–Yates shuffle (optionally seedable)
+Enforce:
+Avoid restriction (no consecutive avoids)
+Potion restriction (max 1 per Room)
+Non-increasing weapon rule
+Carry the 4th card into the next Room
+End game immediately when health ≤ 0 or deck is empty
+Persist game state in LocalStorage for Restart functionality
+Extras
+Help modal: explains rules clearly with examples
+Optional Debug panel: toggle deck order, seed info (hidden by default)
+Score calculation: show win/loss outcome at end with computed score
+Format
+Produce a multi-file project with the following structure:
+
+1) HTML
+Defines structure and containers for:
+HUD
+Room
+Action Log
+Modals
+Controls
+2) CSS
+Handles:
+Responsive layout
+Color variables
+Card styles
+HUD design
+Animations
+Accessibility
+3) JavaScript
+Handles all game logic including:
+
+Game state model
+Deck setup and shuffle
+Room drawing, avoid/face logic
+Card resolution (monsters, weapons, potions)
+Persistence with LocalStorage
+Rendering HUD, Room, and Log
+End game detection and score calculation
+Include inline comments with worked examples for tricky rules (e.g., non-increasing weapon usage, potion restriction).
+
+README.md
+Provide a README that explains:
+
+Game overview
+Rules
+How to run the project
+File responsibilities
