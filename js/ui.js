@@ -25,7 +25,12 @@ const renderHud = (state) => {
   healthFill.parentElement.setAttribute("aria-valuenow", String(state.health));
   healthText.textContent = `${state.health} / ${state.maxHealth}`;
 
-  getEl(selectors.weaponValue).textContent = state.weapon ? `${state.weapon.suit}${valueToLabel(state.weapon.value)}` : "—";
+  const weaponValue = getEl(selectors.weaponValue);
+  if (state.weapon) {
+    weaponValue.innerHTML = `<span class="suit ${suitClass(state.weapon.suit)}">${state.weapon.suit}</span>${valueToLabel(state.weapon.value)}`;
+  } else {
+    weaponValue.textContent = "—";
+  }
   const last = state.weapon ? state.weapon.lastDefeated : null;
   getEl(selectors.weaponLast).textContent = last ? valueToLabel(last) : "—";
 
@@ -48,6 +53,21 @@ const cardTypeLabel = (card) => {
       return "Potion";
     default:
       return "Card";
+  }
+};
+
+const suitClass = (suit) => {
+  switch (suit) {
+    case "♣":
+      return "suit--club";
+    case "♠":
+      return "suit--spade";
+    case "♦":
+      return "suit--diamond";
+    case "♥":
+      return "suit--heart";
+    default:
+      return "";
   }
 };
 
@@ -90,7 +110,7 @@ const buildCardElement = (card, index, { disabled = false, carried = false } = {
 
   const header = document.createElement("div");
   header.className = "card__header";
-  header.innerHTML = `<span>${card.suit}</span><span>${cardTypeLabel(card)}</span>`;
+  header.innerHTML = `<span class="suit ${suitClass(card.suit)}">${card.suit}</span><span>${cardTypeLabel(card)}</span>`;
 
   const value = document.createElement("div");
   value.className = "card__value";
