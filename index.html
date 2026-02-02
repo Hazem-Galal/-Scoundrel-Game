@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Scoundrel — Solo Card Dungeon</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to game</a>
+    <div class="app" id="app">
+      <header class="hud" aria-label="Game status">
+        <div class="hud__left">
+          <div class="meter" aria-label="Health">
+            <div class="meter__label">
+              <span>Health</span>
+              <span id="healthText" aria-live="polite">20 / 20</span>
+            </div>
+            <div class="meter__bar" role="progressbar" aria-valuemin="0" aria-valuemax="20" aria-valuenow="20">
+              <div class="meter__fill" id="healthFill"></div>
+            </div>
+          </div>
+          <div class="weapon" aria-label="Equipped weapon">
+            <div class="weapon__title">Weapon</div>
+            <div class="weapon__info">
+              <span id="weaponValue">—</span>
+              <span class="weapon__meta">Last: <span id="weaponLast">—</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="hud__right">
+          <div class="stat">
+            <span class="stat__label">Turn</span>
+            <span class="stat__value" id="turnCount">1</span>
+          </div>
+          <div class="stat">
+            <span class="stat__label">Deck</span>
+            <span class="stat__value" id="deckCount">44</span>
+          </div>
+          <div class="stat">
+            <span class="stat__label">Discard</span>
+            <span class="stat__value" id="discardCount">0</span>
+          </div>
+          <div class="stat">
+            <span class="stat__label">Avoid</span>
+            <span class="stat__value" id="avoidState">Ready</span>
+          </div>
+        </div>
+      </header>
+
+      <main id="main" class="board" tabindex="-1">
+        <section class="room" aria-label="Current room">
+          <div class="room__header">
+            <h1>Room</h1>
+            <p id="roomHint">Choose three cards to resolve. One carries forward.</p>
+          </div>
+          <div class="room__grid" id="roomGrid" role="list"></div>
+          <div class="room__actions">
+            <button id="avoidBtn" class="btn btn--ghost" type="button">Avoid Room</button>
+            <button id="faceBtn" class="btn btn--primary" type="button">Face Room</button>
+          </div>
+        </section>
+
+        <aside class="panel" aria-label="Controls">
+          <div class="panel__actions">
+            <button id="newGameBtn" class="btn" type="button">New Game</button>
+            <button id="restartBtn" class="btn" type="button">Restart</button>
+            <button id="helpBtn" class="btn" type="button">Help / Rules</button>
+          </div>
+          <div class="panel__footer" id="statusText" aria-live="polite"></div>
+        </aside>
+      </main>
+
+      <section class="log" aria-label="Action log">
+        <div class="log__header">
+          <h2>Action Log</h2>
+          <button id="clearLogBtn" class="btn btn--ghost" type="button">Clear</button>
+        </div>
+        <div class="log__body" id="logBody" role="log" aria-live="polite" aria-relevant="additions"></div>
+      </section>
+    </div>
+
+    <dialog id="helpDialog" class="modal" aria-labelledby="helpTitle">
+      <div class="modal__content">
+        <div class="modal__header">
+          <h2 id="helpTitle">How to Play</h2>
+          <button class="btn btn--icon" data-close-modal aria-label="Close help">×</button>
+        </div>
+        <div class="modal__body" id="helpBody">
+          <h3>Goal</h3>
+          <p>Clear the dungeon deck without your health dropping to 0.</p>
+          <h3>Room Flow</h3>
+          <ul>
+            <li>Draw until 4 cards are visible. This is the room.</li>
+            <li>You may Avoid the room (place all 4 on the bottom), but not twice in a row.</li>
+            <li>If you Face the room, resolve any 3 cards. The 4th carries forward.</li>
+          </ul>
+          <h3>Card Effects</h3>
+          <ul>
+            <li><strong>Weapons (♦):</strong> Equip immediately and clear old weapon stack.</li>
+            <li><strong>Potions (♥):</strong> Heal by value up to 20. Only one per room.</li>
+            <li><strong>Monsters (♣/♠):</strong> Take damage unless defeated by weapon.</li>
+          </ul>
+          <h3>Weapon Rule</h3>
+          <p>A weapon can only defeat monsters with value ≤ the last monster it defeated. The sequence must be non-increasing.</p>
+          <h3>Scoring</h3>
+          <p>Win: score equals remaining health. Lose: score equals negative sum of monster values left in the deck.</p>
+        </div>
+        <div class="modal__footer">
+          <button class="btn btn--primary" data-close-modal type="button">Got it</button>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog id="endDialog" class="modal" aria-labelledby="endTitle">
+      <div class="modal__content">
+        <div class="modal__header">
+          <h2 id="endTitle">Game Over</h2>
+        </div>
+        <div class="modal__body">
+          <p id="endSummary"></p>
+        </div>
+        <div class="modal__footer">
+          <button class="btn btn--primary" data-end-restart type="button">Play Again</button>
+        </div>
+      </div>
+    </dialog>
+
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>
